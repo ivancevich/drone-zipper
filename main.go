@@ -65,21 +65,36 @@ func zipThem(files []string, basePath, target string) error {
 		}
 
 		if info.IsDir() {
-			return errors.New("File is a directory")
+			return errors.New("Directories are not supported")
 		}
 
-		data, err := os.Open(current)
+		header, err := zip.FileInfoHeader(info)
 		if err != nil {
 			return err
 		}
 
-		f, err := archive.Create(target + "/" + info.Name())
+		header.Method = zip.Deflate
+		header.Name = info.Name()
+
+		fileContents, err := os.Open(current)
 		if err != nil {
 			return err
 		}
 
-		io.Copy(f, data)
-		data.Close()
+		writer, err := archive.CreateHeader(header)
+		if err != nil {
+			return err
+		}
+
+		_, err = io.Copy(writer, fileContents)
+		if err != nil {
+			return err
+		}
+
+		err = fileContents.Close()
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
