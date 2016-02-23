@@ -11,7 +11,7 @@ import (
 )
 
 type Config struct {
-	Files []string `json:files`
+	Files []string `json:"files"`
 }
 
 var (
