@@ -11,8 +11,9 @@ import (
 )
 
 type Config struct {
-	Files []string `json:"files"`
-	Name  string   `json:"name"`
+	Files  []string `json:"files"`
+	Name   string   `json:"name"`
+	Output string   `json:"output"`
 }
 
 var (
@@ -37,7 +38,11 @@ func main() {
 		vargs.Name = "archive"
 	}
 
-	err := zipThem(vargs.Files, workspace.Path, vargs.Name)
+	if len(vargs.Output) == 0 {
+		vargs.Output = "."
+	}
+
+	err := zipThem(vargs.Files, workspace.Path, vargs.Name, vargs.Output)
 
 	if err != nil {
 		fmt.Println("Error: ", err)
@@ -46,8 +51,8 @@ func main() {
 }
 
 // Zip files or directories
-func zipThem(files []string, basePath, target string) error {
-	zipFile, err := os.Create(filepath.Join(basePath, target+".zip"))
+func zipThem(files []string, basePath, target, output string) error {
+	zipFile, err := os.Create(filepath.Join(basePath, output, target+".zip"))
 	if err != nil {
 		return err
 	}
