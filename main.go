@@ -12,6 +12,7 @@ import (
 
 type Config struct {
 	Files []string `json:"files"`
+	Name  string   `json:"name"`
 }
 
 var (
@@ -32,7 +33,11 @@ func main() {
 		return
 	}
 
-	err := zipThem(vargs.Files, workspace.Path, "Foo") // TODO: support custom names
+	if len(vargs.Name) == 0 {
+		vargs.Name = "archive"
+	}
+
+	err := zipThem(vargs.Files, workspace.Path, vargs.Name)
 
 	if err != nil {
 		fmt.Println("Error: ", err)
