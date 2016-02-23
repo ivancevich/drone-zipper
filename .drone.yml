@@ -1,0 +1,27 @@
+build:
+  image: golang:1.6
+  environment:
+    - CGO_ENABLED=0
+  commands:
+    - make deps
+    - make vet
+    - make build
+    - make test
+
+publish:
+  docker:
+    username: $$DOCKER_USER
+    password: $$DOCKER_PASS
+    email: $$DOCKER_EMAIL
+    repo: ivancevich/drone-zipper
+    tag: latest
+    when:
+      branch: master
+
+plugin:
+  name: Gozipper
+  desc: Zip files for publishing
+  type: publish
+  image: ivancevich/drone-zipper
+  labels:
+    - zip
