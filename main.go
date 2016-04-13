@@ -45,12 +45,11 @@ func main() {
 	err := zipThem(vargs.Files, workspace.Path, vargs.Name, vargs.Output)
 
 	if err != nil {
-		fmt.Println("Error: ", err)
+		fmt.Println("Error: ", err.Error())
 		os.Exit(1)
 	}
 }
 
-// Zip files or directories
 func zipThem(files []string, basePath, target, output string) error {
 	zipFile, err := os.Create(filepath.Join(basePath, output, target+".zip"))
 	if err != nil {
