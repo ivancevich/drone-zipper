@@ -3,7 +3,7 @@ Zip files within Drone CI
 
 ## Build
 ```bash
-make deps build docker
+make deps docker
 ```
 
 ## Publish
